@@ -6,6 +6,7 @@ import pandas as pd
 from dataclasses import dataclass
 from sklearn.model_selection import train_test_split
 
+from src.components.model_trainer import ModelTrainer
 from src.exception import CustomException
 from src.logger import logging
 
@@ -86,12 +87,26 @@ class DataIngestion:
 
 
 if __name__ == "__main__":
+
+    # Step 1: Read the training and testing data
     obj = DataIngestion()
     train_data, test_data = obj.initiate_data_ingestion()
 
-    Data_Transformation= DataTransformation()
-    Data_Transformation.initiate_data_transformation(train_data,test_data)
+    # Step 2: Transform the data into a suitable format for training
+    data_transformation = DataTransformation()
+    train_arr, test_arr, _ = data_transformation.initiate_data_transformation(
+        train_data, test_data
+    )
 
-    print("Data ingestion completed successfully!")
-    print(f"Training data saved at: {train_data}")
-    print(f"Testing data saved at: {test_data}")
+    # Step 3: Train the models and find the best model
+    modeltrainer = ModelTrainer()
+
+    # Step 4: Print the final R2 score
+    print(
+        modeltrainer.initiate_model_trainer(
+            train_arr,
+            test_arr
+        )
+    )
+
+
